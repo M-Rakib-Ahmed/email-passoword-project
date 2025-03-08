@@ -3,17 +3,25 @@ import React, { useState } from 'react';
 import auth from '../firebase_init_';
 import { LuGoal } from 'react-icons/lu';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 const Signup = () => {
     const [success, setSuccess]=useState(false)
     const [errormessage, setErrorMessage]=useState('')
     const [showPassword, setShowPassowrd]=useState(false);
     const handelSingUp = (e)=>{
+        console.log('hellow');
+        
         e.preventDefault() 
         const email = e.target.email.value;
         const password = e.target.password.value;
+        const termas = e.target.trmas.checked
         setErrorMessage('')
         setSuccess(false)
+        if(!termas){
+            setErrorMessage('please accupt our terms condition')
+            return
+        }
         if (password.length <= 6) {
             setErrorMessage('worng password');
             return
@@ -42,12 +50,19 @@ const Signup = () => {
                         <input name="email" type="email" className="input" placeholder="Email" />
                         <label className="fieldset-label">Password</label>
                         <input name='password' type={showPassword? 'text': 'password'} className="input" placeholder="Password" />
-                        <button onClick={()=> setShowPassowrd(!showPassword)} className='btn   absolute mt-[98px] ml-[275px]'>
+                        <span onClick={()=> setShowPassowrd(!showPassword)} className='btn   absolute mt-[98px] ml-[275px]'>
                             {showPassword ? <FaEyeSlash></FaEyeSlash> :<FaEye></FaEye>
                            }
-                        </button>
+                        </span>
                         <div><a className="link link-hover">Forgot password?</a></div>
-                        <button className="btn btn-neutral mt-4 bg-green-600">Sing Up</button>
+                        <fieldset className="fieldsetbg-base-100  w-full">
+                            <label className="fieldset-label">
+                                <input name='trmas' type="checkbox" className="checkbox " />
+                               Accept Our tems And Condition
+                            </label>
+                        </fieldset>
+                        <button type='submit' className="btn btn-neutral mt-4 bg-green-600">Sing Up</button>
+                        <p className="text-center text-lg">Already have an account<Link className="text-green-700 underline" to={'/login'}>Login</Link></p>
                     </fieldset>
                 </div>
             {
@@ -56,7 +71,9 @@ const Signup = () => {
             {
                 success && <p className='text-green-600 text-center'>Successfully create user</p>
             }
+            
             </form>
+            
         </div>
     );
 };
